@@ -1,0 +1,87 @@
+<navigation-bar title="写一封当下的小烦恼" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <view class="hero-card">
+      <view class="hero-title">解忧信箱</view>
+      <view class="hero-subtitle">
+        这里不是诊疗室，只是一个安静的信箱。把此刻的压力、委屈或困惑写下来，会有一位陌生人认真读完并回信给你。
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="field">
+        <view class="field-label">给这封信取个名字（可选）</view>
+        <input
+          class="field-input"
+          placeholder="例如：最近有点撑不住的自己"
+          maxlength="40"
+          bindinput="onTitleChange"
+          value="{{title}}"
+        />
+      </view>
+
+      <view class="field">
+        <view class="field-label">想对这封信说些什么？</view>
+        <textarea
+          class="field-textarea"
+          placeholder="可以写下最近让你疲惫的事情、让你难过的瞬间，或一个你不太敢对身边人说出口的想法。"
+          auto-height
+          maxlength="800"
+          bindinput="onContentChange"
+          value="{{content}}"
+        />
+        <view class="field-helper">{{content.length}} / 800</view>
+      </view>
+
+      <!-- 图片上传 -->
+      <view class="field">
+        <view class="field-label">添加图片（可选，最多9张）</view>
+        <view class="media-grid">
+          <block wx:for="{{images}}" wx:key="index">
+            <view class="media-item">
+              <image class="media-image" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-index="{{index}}" />
+              <view class="media-delete" bindtap="onDeleteImage" data-index="{{index}}">
+                <text class="delete-icon">×</text>
+              </view>
+            </view>
+          </block>
+          <view wx:if="{{images.length < 9}}" class="media-item media-add" bindtap="onChooseImages">
+            <text class="add-icon">+</text>
+            <text class="add-text">图片</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 视频上传 -->
+      <view class="field">
+        <view class="field-label">添加视频（可选，最多1个）</view>
+        <view class="media-grid">
+          <view wx:if="{{videoPath}}" class="media-item media-video">
+            <video class="media-video-player" src="{{videoPath}}" />
+            <view class="media-delete" bindtap="onDeleteVideo">
+              <text class="delete-icon">×</text>
+            </view>
+          </view>
+          <view wx:if="{{!videoPath}}" class="media-item media-add" bindtap="onChooseVideo">
+            <text class="add-icon">+</text>
+            <text class="add-text">视频</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-safe" />
+
+    <view class="submit-bar">
+      <button
+        class="primary-btn"
+        loading="{{submitting}}"
+        disabled="{{submitting}}"
+        bindtap="onSubmit"
+      >
+        投递到解忧杂货铺
+      </button>
+    </view>
+  </view>
+</scroll-view>
+

@@ -1,0 +1,149 @@
+<navigation-bar title="我的未来信箱" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <view class="toolbar">
+      <input class="search-input" placeholder="搜索标题/内容/标签" bindinput="onSearchInput" />
+      <picker mode="selector" range="{{sortOptions}}" bindchange="onSortChange">
+        <view class="sort-btn">{{sortOptions[sortIndex]}}</view>
+      </picker>
+      <view class="toolbar-btn" bindtap="onToggleManage">{{managing ? '完成' : '管理'}}</view>
+      <view class="toolbar-btn" bindtap="onToggleTrash">{{showTrash ? '返回' : '回收站'}}</view>
+    </view>
+
+    <view class="batch-bar" wx:if="{{managing}}">
+      <view class="batch-info">已选 {{selectedIds.length}} 项</view>
+      <view class="batch-actions">
+        <button class="batch-btn" bindtap="onBatchDelete">删除</button>
+        <button class="batch-btn" bindtap="onBatchRestore" wx:if="{{showTrash}}">还原</button>
+      </view>
+    </view>
+
+    <view wx:if="{{showTrash}}">
+      <view class="section-title">回收站</view>
+      <block wx:if="{{trashLetters.length}}">
+        <view class="list">
+          <block wx:for="{{trashLetters}}" wx:key="id">
+            <view class="letter-card letter-card--past">
+              <view class="select-box" wx:if="{{managing}}" data-id="{{item.id}}" catchtap="onToggleSelect">
+                {{selectedIds.indexOf(item.id) !== -1 ? '✅' : '⬜'}}
+              </view>
+              <view class="letter-header">
+                <view class="letter-status-badge">🗑 已删除</view>
+                <view class="letter-title">{{item.title}}</view>
+                <view class="letter-tag">删除于 {{item.createdAtText}}</view>
+              </view>
+              <view class="letter-content">{{item.content}}</view>
+              <view class="letter-footer">
+                <view class="footer-right">
+                  <view class="action-chip" data-id="{{item.id}}" bindtap="onRestoreLetter">还原</view>
+                  <view class="action-chip action-chip--danger" data-id="{{item.id}}" bindtap="onPermanentDelete">永久删除</view>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-block empty-block--small">
+          <view class="empty-subtitle">回收站还是空的。</view>
+        </view>
+      </block>
+    </view>
+
+    <view wx:if="{{!showTrash}}">
+      <view class="section-title">等待开启的信</view>
+      <block wx:if="{{upcomingLetters.length}}">
+        <view class="list">
+          <block wx:for="{{upcomingLetters}}" wx:key="id">
+            <view class="letter-card letter-card--upcoming" data-id="{{item.id}}" bindtap="onViewLetter">
+              <view class="select-box" wx:if="{{managing}}" data-id="{{item.id}}" catchtap="onToggleSelect">
+                {{selectedIds.indexOf(item.id) !== -1 ? '✅' : '⬜'}}
+              </view>
+              <view class="letter-header">
+                <view class="letter-title">{{item.title}}</view>
+                <view class="letter-tag">将在 {{item.targetDate}} 收到</view>
+              </view>
+              <view class="remind-badge" wx:if="{{item.remindLabel}}">{{item.remindLabel}}</view>
+              <view class="letter-content">{{item.content}}</view>
+              <view class="letter-footer">
+                <view class="letter-meta">
+                  <text class="meta-label">写于</text>
+                  <text class="meta-value">{{item.createdAtText}}</text>
+                  <text class="meta-label" wx:if="{{item.readCount > 0}}" style="margin-left: 16rpx;">阅读</text>
+                  <text class="meta-value" wx:if="{{item.readCount > 0}}">{{item.readCount}}次</text>
+                </view>
+                <view class="footer-right">
+                  <view class="more-menu" data-id="{{item.id}}" catchtap="onShowMoreMenu">⋮</view>
+                  <view class="mood-chip" wx:if="{{item.moodLabel}}">{{item.moodLabel}}</view>
+                  <view
+                    class="publish-stamp {{item.published ? 'publish-stamp--on' : ''}}"
+                    wx:if="{{item.shareable}}"
+                    data-id="{{item.id}}"
+                    catchtap="onTogglePublish"
+                  >
+                    <text class="stamp-icon">📤</text>
+                    <text class="stamp-text">{{item.published ? '已寄出' : '发布'}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-block">
+          <view class="empty-title">还没有投递中的未来信</view>
+          <view class="empty-subtitle">从今天开始，给未来一点期待。</view>
+        </view>
+      </block>
+
+      <view class="section-title section-title--history">已经抵达的信</view>
+      <block wx:if="{{pastLetters.length}}">
+        <view class="list">
+          <block wx:for="{{pastLetters}}" wx:key="id">
+            <view class="letter-card letter-card--past" data-id="{{item.id}}" bindtap="onViewLetter">
+              <view class="select-box" wx:if="{{managing}}" data-id="{{item.id}}" catchtap="onToggleSelect">
+                {{selectedIds.indexOf(item.id) !== -1 ? '✅' : '⬜'}}
+              </view>
+              <view class="letter-header">
+                <view class="letter-status-badge">
+                  {{item.opened ? '✓ 已拆封' : '🔖 未拆封'}}
+                </view>
+                <view class="letter-title">{{item.title}}</view>
+                <view class="letter-tag">已于 {{item.targetDate}} 抵达</view>
+              </view>
+              <view class="letter-content">{{item.content}}</view>
+              <view class="letter-footer">
+                <view class="letter-meta">
+                  <text class="meta-label">写于</text>
+                  <text class="meta-value">{{item.createdAtText}}</text>
+                  <text class="meta-label" wx:if="{{item.readCount > 0}}" style="margin-left: 16rpx;">阅读</text>
+                  <text class="meta-value" wx:if="{{item.readCount > 0}}">{{item.readCount}}次</text>
+                </view>
+                <view class="footer-right">
+                  <view class="more-menu" data-id="{{item.id}}" catchtap="onShowMoreMenu">⋮</view>
+                  <view class="mood-chip" wx:if="{{item.moodLabel}}">{{item.moodLabel}}</view>
+                  <view
+                    class="publish-stamp {{item.published ? 'publish-stamp--on' : ''}}"
+                    wx:if="{{item.shareable}}"
+                    data-id="{{item.id}}"
+                    bindtap="onTogglePublish"
+                  >
+                    <text class="stamp-icon">📤</text>
+                    <text class="stamp-text">{{item.published ? '已寄出' : '发布'}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-block empty-block--small">
+          <view class="empty-subtitle">等这些信陆续抵达时，你会看到自己的变化。</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</scroll-view>
+

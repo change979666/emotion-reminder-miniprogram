@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/write/write",
+    "pages/letters/letters",
+    "pages/letter-detail/letter-detail",
+    "pages/cards/cards",
+    "pages/community/community",
+    "pages/post-detail/post-detail",
+    "pages/messages/messages",
+    "pages/stickers/stickers",
+    "pages/achievements/achievements",
+    "pages/task-center/task-center",
+    "pages/help/index",
+    "pages/help/write",
+    "pages/help/reply",
+    "pages/help/inbox",
+    "pages/report/report",
+    "pages/settings/settings",
+    "pages/settings/profile",
+    "pages/settings/account",
+    "pages/settings/notification",
+    "pages/settings/preferences",
+    "pages/settings/agreement",
+    "pages/settings/about",
+    "pages/settings/contact",
+    "pages/admin/admin",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "style": "v2",
+  "renderer": "skyline",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true,
+      "tagNameStyleIsolation": "legacy",
+      "disableABTest": true,
+      "sdkVersionBegin": "3.0.0",
+      "sdkVersionEnd": "15.255.255"
+    }
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "tabBar": {
+    "custom": true,
+    "color": "#9A6B4F",
+    "selectedColor": "#D97706",
+    "backgroundColor": "#FFF7ED",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "个人"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "社区"
+      },
+      {
+        "pagePath": "pages/help/index",
+        "text": "解忧"
+      }
+    ]
+  }
+}

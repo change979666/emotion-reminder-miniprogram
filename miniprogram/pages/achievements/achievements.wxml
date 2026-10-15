@@ -1,0 +1,92 @@
+<navigation-bar title="我的成就" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <!-- 成就概览 -->
+    <view class="overview-card">
+      <view class="overview-header">
+        <view class="overview-icon">🏆</view>
+        <view class="overview-content">
+          <view class="overview-title">成就系统</view>
+          <view class="overview-subtitle">记录你在未来信箱的每一个里程碑</view>
+        </view>
+      </view>
+      <view class="overview-stats">
+        <view class="stat-box">
+          <view class="stat-number">{{completedCount}}</view>
+          <view class="stat-label">已完成</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-number">{{inProgressCount}}</view>
+          <view class="stat-label">进行中</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-number">{{lockedCount}}</view>
+          <view class="stat-label">未解锁</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 成就筛选 -->
+    <view class="filter-tabs">
+      <view 
+        class="filter-tab {{activeFilter === 'all' ? 'filter-tab--active' : ''}}"
+        data-filter="all"
+        bindtap="onFilterChange"
+      >
+        全部
+      </view>
+      <view 
+        class="filter-tab {{activeFilter === 'completed' ? 'filter-tab--active' : ''}}"
+        data-filter="completed"
+        bindtap="onFilterChange"
+      >
+        已完成
+      </view>
+      <view 
+        class="filter-tab {{activeFilter === 'inProgress' ? 'filter-tab--active' : ''}}"
+        data-filter="inProgress"
+        bindtap="onFilterChange"
+      >
+        进行中
+      </view>
+      <view 
+        class="filter-tab {{activeFilter === 'locked' ? 'filter-tab--active' : ''}}"
+        data-filter="locked"
+        bindtap="onFilterChange"
+      >
+        未解锁
+      </view>
+    </view>
+
+    <!-- 成就列表 -->
+    <view class="achievements-list">
+      <block wx:for="{{filteredAchievements}}" wx:key="id">
+        <view class="achievement-card achievement-card--{{item.status}}">
+          <view class="achievement-icon-large">{{item.icon}}</view>
+          <view class="achievement-main">
+            <view class="achievement-name">{{item.title}}</view>
+            <view class="achievement-desc">{{item.subtitle}}</view>
+            <view class="achievement-progress-bar" wx:if="{{item.status !== 'locked'}}">
+              <view class="progress-track">
+                <view class="progress-fill" style="width: {{item.progressPercent}}%"></view>
+              </view>
+              <view class="progress-text">{{item.progressText}}</view>
+            </view>
+            <view class="achievement-reward" wx:if="{{item.reward}}">
+              <text class="reward-icon">🎁</text>
+              <text class="reward-text">{{item.reward}}</text>
+            </view>
+          </view>
+          <view class="achievement-badge" wx:if="{{item.status === 'completed'}}">
+            <text class="badge-icon">✓</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <view class="empty" wx:if="{{filteredAchievements.length === 0}}">
+      <view class="empty-icon">🔍</view>
+      <view class="empty-text">没有找到相关成就</view>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,151 @@
+<navigation-bar title="解忧杂货铺" back="{{false}}" color="white" background="transparent"></navigation-bar>
+<view class="bg-stars"></view>
+<scroll-view class="scrollarea" scroll-y refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+  <view class="page {{themeClass}}">
+    <view class="hero">
+      <view class="hero-title">🌙 捞一封需要被听见的信</view>
+      <view class="hero-subtitle">从这些信里选一封，写一段温柔的回信。你不需要给答案，只需要诚实、善意地做一个倾听者。</view>
+    </view>
+
+    <!-- 捞取区域 -->
+    <view class="pick-section">
+      <view class="pick-button-container">
+        <view class="pick-button {{isPicking ? 'pick-button--picking' : ''}}" bindtap="onPickRandom">
+          <view class="pick-button-icon" wx:if="{{!isPicking}}">🎣</view>
+          <view class="pick-button-loading" wx:if="{{isPicking}}">
+            <view class="loading-dot"></view>
+            <view class="loading-dot"></view>
+            <view class="loading-dot"></view>
+          </view>
+          <view class="pick-button-text">{{isPicking ? '正在捞取...' : '捞一捞'}}</view>
+        </view>
+      </view>
+
+      <!-- 捞到的信件卡片 -->
+      <view class="picked-card {{showPickedCard ? 'picked-card--show' : ''}}" wx:if="{{pickedLetter}}">
+        <view class="picked-card-header">
+          <view class="picked-card-badge">{{pickMessage}}</view>
+        </view>
+        <view class="picked-card-content">
+          <view class="picked-card-title">{{pickedLetter.title}}</view>
+          <view class="picked-card-text">{{pickedLetter.content}}</view>
+          <view class="picked-card-meta">
+            <text class="meta-item">💬 {{pickedLetter.replyCount || 0}} 条回复</text>
+          </view>
+        </view>
+        <view class="picked-card-actions">
+          <button class="action-btn action-btn--secondary" bindtap="onRepick">再捞一次</button>
+          <button class="action-btn action-btn--primary" bindtap="onOpenPickedLetter">写回信</button>
+        </view>
+      </view>
+
+      <!-- 空状态提示 -->
+      <view class="empty-hint" wx:if="{{!showPickedCard && !isPicking}}">
+        <view class="empty-hint-icon">💌</view>
+        <view class="empty-hint-text">点击上方按钮，捞一封需要被听见的信</view>
+      </view>
+    </view>
+
+    <!-- 功能入口区域 -->
+    <view class="entry-section">
+      <view class="entry-card" bindtap="goInbox">
+        <view class="entry-icon">📬</view>
+        <view class="entry-content">
+          <view class="entry-title">我的树洞</view>
+          <view class="entry-desc">查看我收到的温柔回信</view>
+        </view>
+        <view class="entry-action">查看</view>
+      </view>
+
+      <view class="entry-card entry-card--primary" bindtap="goWrite">
+        <view class="entry-icon">✍️</view>
+        <view class="entry-content">
+          <view class="entry-title">求助</view>
+          <view class="entry-desc">写下当下的小烦恼，等待一封温柔回信</view>
+        </view>
+        <view class="entry-action entry-action--primary">去写</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 回复面板 -->
+<view wx:if="{{showReplyPanel}}" class="reply-mask" bindtap="onCloseReply"></view>
+<view wx:if="{{showReplyPanel}}" class="reply-sheet {{showReplyPanel ? 'reply-sheet--show' : ''}}">
+  <view class="reply-header">
+    <view class="reply-title reply-title--warm">💌 不用完美，真诚就好～</view>
+    <view class="reply-subtitle reply-subtitle--warm">你的一句话，可能会照亮别人的一整天</view>
+  </view>
+  
+  <scroll-view scroll-y class="reply-scroll-content">
+    <view class="reply-target-card">
+      <view class="reply-target-title">{{currentHelp.title}}</view>
+      <view class="reply-target-content">{{currentHelp.content}}</view>
+    </view>
+
+    <view class="reply-tools">
+      <view class="tool-btn" bindtap="onSkipHelp">
+        <text>⏭️ 跳过</text>
+      </view>
+      <view class="tool-btn tool-btn--primary" bindtap="onCommentTap">
+        <text>✏️ 写回复</text>
+      </view>
+      <view class="tool-btn" bindtap="onToggleReplies">
+        <text>💬 看回复 ({{currentHelp.replyCount || 0}})</text>
+      </view>
+    </view>
+
+    <view class="template-section">
+      <view class="template-title">温柔回信模板（仅供参考）</view>
+      <view class="template-list">
+        <block wx:for="{{replyTemplates}}" wx:key="index">
+          <view class="template-chip" data-text="{{item}}" bindtap="onUseTemplate">{{item}}</view>
+        </block>
+      </view>
+    </view>
+
+    <view class="reply-guide">
+      <swiper class="reply-guide-swiper" autoplay interval="2400" duration="600" circular vertical>
+        <block wx:for="{{replyGuides}}" wx:key="index">
+          <swiper-item>
+            <view class="reply-guide-item">{{item}}</view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <textarea
+      class="reply-textarea"
+      placeholder="抱抱你～ 你可以先说说你的感受，再分享一点温暖的陪伴…"
+      auto-height
+      maxlength="600"
+      focus="{{replyFocus}}"
+      bindinput="onReplyContentChange"
+      value="{{replyContent}}"
+    />
+
+    <view wx:if="{{showReplies}}" class="reply-list">
+      <block wx:if="{{replyLoading}}">
+        <view class="reply-loading">加载回复中…</view>
+      </block>
+      <block wx:elif="{{currentReplies.length}}">
+        <block wx:for="{{currentReplies}}" wx:key="_id">
+          <view class="reply-item">
+            <view class="reply-content-item">{{item.content}}</view>
+            <view class="reply-meta">{{item.createdAtText}}</view>
+          </view>
+        </block>
+      </block>
+      <block wx:else>
+        <view class="reply-empty">还没有人回复，先当第一位温柔的人吧。</view>
+      </block>
+    </view>
+    
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+
+  <view class="reply-actions">
+    <button class="reply-cancel" bindtap="onCloseReply">关闭</button>
+    <button class="reply-submit" loading="{{submitting}}" bindtap="onSubmitReply">发送回信</button>
+  </view>
+</view>

@@ -1,0 +1,86 @@
+<navigation-bar title="账号与隐私" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 账号信息 -->
+    <view class="section">
+      <view class="section-title">账号信息</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-label">用户ID</view>
+          <view class="item-value">
+            <text>{{shortUserId}}</text>
+            <text class="copy-btn" bindtap="copyUserId">复制</text>
+          </view>
+        </view>
+        <view class="list-item">
+          <view class="item-label">手机号</view>
+          <view class="item-value">
+            <text wx:if="{{userPhone}}">{{userPhone}}</text>
+            <button wx:else class="bind-btn" open-type="getPhoneNumber" bind:getphonenumber="onGetPhoneNumber">
+              绑定手机号
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 隐私设置 -->
+    <view class="section">
+      <view class="section-title">隐私设置</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-label">允许他人搜索</view>
+          <switch
+            checked="{{privacySettings.allowSearch}}"
+            data-key="allowSearch"
+            bindchange="onPrivacyChange"
+            color="#d97706"
+          />
+        </view>
+        <view class="list-item">
+          <view class="item-label">显示在线状态</view>
+          <switch
+            checked="{{privacySettings.showOnlineStatus}}"
+            data-key="showOnlineStatus"
+            bindchange="onPrivacyChange"
+            color="#d97706"
+          />
+        </view>
+        <view class="list-item">
+          <view class="item-label">允许陌生人私信</view>
+          <switch
+            checked="{{privacySettings.allowStrangerMessage}}"
+            data-key="allowStrangerMessage"
+            bindchange="onPrivacyChange"
+            color="#d97706"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 加密口令 -->
+    <view class="section">
+      <view class="section-title">信件加密</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-label">加密口令</view>
+          <input
+            class="item-input"
+            placeholder="设置解锁口令（可选）"
+            maxlength="16"
+            bindinput="onEncryptKeyInput"
+            value="{{encryptKey}}"
+          />
+        </view>
+        <view class="list-item">
+          <button class="bind-btn" bindtap="onSaveEncryptKey">保存口令</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="tip-text">隐私设置修改后立即生效</view>
+
+  </view>
+</scroll-view>

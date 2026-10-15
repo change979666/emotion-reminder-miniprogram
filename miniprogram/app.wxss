@@ -1,0 +1,26 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+
+.theme-dark {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.theme-dark .section-title,
+.theme-dark .hero-title,
+.theme-dark .hero-subtitle,
+.theme-dark .stat-label,
+.theme-dark .grid-label,
+.theme-dark .help-card-title,
+.theme-dark .help-label,
+.theme-dark .help-title {
+  color: #e2e8f0;
+}

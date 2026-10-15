@@ -1,0 +1,165 @@
+<navigation-bar title="信件详情" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<view class="page skin-{{activeSkin}} {{themeClass}}">
+  <!-- 未拆封状态 -->
+  <view class="envelope-section" wx:if="{{!envelopeOpened}}">
+    <view class="envelope {{isOpening ? 'envelope--opening' : ''}}" bindtap="onOpenEnvelope">
+      <view class="envelope-icon">💌</view>
+      <view class="envelope-text">
+        {{isOpening ? '拆信中...' : '🔖 未拆封'}}
+      </view>
+      <view class="envelope-hint" wx:if="{{!isOpening}}">
+        点击开启时光信件
+      </view>
+    </view>
+  </view>
+
+  <!-- 已拆封 - 显示内容 -->
+  <scroll-view class="content-section {{showContent ? 'content-section--show' : ''}}" scroll-y wx:if="{{envelopeOpened}}">
+    <view class="skin-toolbar">
+      <view class="skin-title">信纸皮肤</view>
+      <view class="skin-list">
+        <block wx:for="{{skins}}" wx:key="id" wx:for-item="skin">
+          <view class="skin-chip {{activeSkin === skin.id ? 'skin-chip--active' : ''}}" data-skin="{{skin.id}}" bindtap="onSelectSkin">
+            {{skin.name}}
+          </view>
+        </block>
+      </view>
+      <view class="sound-toggle" bindtap="onToggleSound">
+        <text class="sound-icon">{{soundEnabled ? '🔊' : '🔈'}}</text>
+        <text class="sound-text">{{soundEnabled ? '音效已开' : '音效已关'}}</text>
+      </view>
+    </view>
+    <view class="letter-card">
+      <view class="letter-header">
+        <view class="letter-badge">✓ 已拆封</view>
+        <view class="letter-date">{{letter.targetDate}}</view>
+      </view>
+      
+      <view class="paper-sheet">
+        <view class="letter-title">{{letter.title}}</view>
+        <view class="letter-content" wx:if="{{!letter.encrypted || decryptedContent}}">
+          {{letter.encrypted ? decryptedContent : letter.content}}
+        </view>
+        <view class="letter-content" wx:else>
+          这封信已加密，解锁后才能查看内容。
+        </view>
+        <button class="unlock-btn" wx:if="{{letter.encrypted && !decryptedContent}}" bindtap="onOpenUnlock">解锁信件</button>
+      </view>
+
+      <view class="target-card" wx:if="{{letter.target}}">
+        <view class="target-title">🎯 当时的小目标</view>
+        <view class="target-text">{{letter.target}}</view>
+        <view class="target-actions">
+          <block wx:for="{{targetStatusOptions}}" wx:key="id" wx:for-item="opt">
+            <view class="target-chip {{letter.targetStatus === opt.id ? 'target-chip--active' : ''}}" data-status="{{opt.id}}" bindtap="onUpdateTargetStatus">
+              {{opt.label}}
+            </view>
+          </block>
+        </view>
+        <view class="target-card-actions">
+          <button class="action-chip" bindtap="onOpenTargetCard">生成时光对比卡片</button>
+        </view>
+      </view>
+      
+      <view class="letter-footer">
+        <view class="letter-mood">{{letter.mood}}</view>
+        <view class="letter-created">
+          写于 {{letter.createdAtText}}
+        </view>
+      </view>
+
+      <view class="letter-actions">
+        <button class="action-chip" bindtap="onCopyContent">复制内容</button>
+        <button class="action-chip" bindtap="onExportContent">导出内容</button>
+      </view>
+    </view>
+
+    <!-- 已有感想展示 -->
+    <view class="reflection-display" wx:if="{{letter.reflection && !showReflection}}">
+      <view class="reflection-label">💭 你的感想</view>
+      <view class="reflection-content">{{letter.reflection}}</view>
+      <button class="edit-reflection-btn" bindtap="onOpenReflection">编辑感想</button>
+    </view>
+
+    <view class="bottom-safe" />
+  </scroll-view>
+
+  <!-- 时光小提问弹窗 -->
+  <view class="reflection-mask" wx:if="{{showReflection}}" bindtap="onCloseReflection"></view>
+  <view class="reflection-modal {{showReflection ? 'reflection-modal--show' : ''}}" wx:if="{{showReflection}}">
+    <view class="reflection-header">
+      <view class="reflection-title">{{currentReflection}}</view>
+      <view class="reflection-subtitle">写下此刻的感受，和过去的自己对话～</view>
+    </view>
+    
+    <textarea
+      class="reflection-textarea"
+      placeholder="你可以写下任何想法..."
+      maxlength="500"
+      value="{{reflectionText}}"
+      bindinput="onReflectionInput"
+      auto-focus
+    />
+    
+    <view class="reflection-actions">
+      <button class="reflection-btn reflection-btn--cancel" bindtap="onCloseReflection">
+        稍后再说
+      </button>
+      <button class="reflection-btn reflection-btn--save" bindtap="onSaveReflection">
+        保存感想
+      </button>
+    </view>
+  </view>
+
+  <!-- 目标打卡弹窗 -->
+  <view class="reflection-mask" wx:if="{{showTargetCheckin}}" bindtap="onCloseTargetCheckin"></view>
+  <view class="reflection-modal {{showTargetCheckin ? 'reflection-modal--show' : ''}}" wx:if="{{showTargetCheckin}}">
+    <view class="reflection-header">
+      <view class="reflection-title">目标打卡</view>
+      <view class="reflection-subtitle">这封信里的目标，你现在处于什么状态？</view>
+    </view>
+    <view class="target-modal-actions">
+      <block wx:for="{{targetStatusOptions}}" wx:key="id" wx:for-item="opt">
+        <button class="reflection-btn reflection-btn--save" data-status="{{opt.id}}" bindtap="onSelectTargetStatus">
+          {{opt.label}}
+        </button>
+      </block>
+      <button class="reflection-btn reflection-btn--cancel" bindtap="onCloseTargetCheckin">稍后再说</button>
+    </view>
+  </view>
+
+  <!-- 时光对比卡片弹窗 -->
+  <view class="reflection-mask" wx:if="{{showTargetCardModal}}" bindtap="onCloseTargetCard"></view>
+  <view class="reflection-modal {{showTargetCardModal ? 'reflection-modal--show' : ''}}" wx:if="{{showTargetCardModal}}">
+    <view class="reflection-header">
+      <view class="reflection-title">写下现在的结果</view>
+      <view class="reflection-subtitle">它将与“当时的期待”一起生成时光对比卡片</view>
+    </view>
+    <textarea
+      class="reflection-textarea"
+      placeholder="例如：已经拿到 offer，也学会了更温柔地照顾自己"
+      maxlength="120"
+      value="{{targetResultInput}}"
+      bindinput="onTargetResultInput"
+      auto-focus
+    />
+    <view class="reflection-actions">
+      <button class="reflection-btn reflection-btn--cancel" bindtap="onCloseTargetCard">取消</button>
+      <button class="reflection-btn reflection-btn--save" bindtap="onConfirmTargetCard">生成卡片</button>
+    </view>
+  </view>
+
+  <!-- 解锁弹窗 -->
+  <view class="reflection-mask" wx:if="{{unlockVisible}}" bindtap="onCloseUnlock"></view>
+  <view class="reflection-modal {{unlockVisible ? 'reflection-modal--show' : ''}}" wx:if="{{unlockVisible}}">
+    <view class="reflection-header">
+      <view class="reflection-title">输入解锁口令</view>
+      <view class="reflection-subtitle">口令保存在「账号与隐私」中</view>
+    </view>
+    <input class="reflection-textarea" placeholder="请输入口令" password bindinput="onUnlockInput" value="{{unlockKey}}" />
+    <view class="reflection-actions">
+      <button class="reflection-btn reflection-btn--cancel" bindtap="onCloseUnlock">取消</button>
+      <button class="reflection-btn reflection-btn--save" bindtap="onConfirmUnlock">解锁</button>
+    </view>
+  </view>
+</view>

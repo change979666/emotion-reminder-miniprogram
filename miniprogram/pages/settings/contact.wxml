@@ -1,0 +1,59 @@
+<navigation-bar title="联系客服" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 联系方式 -->
+    <view class="contact-info">
+      <view class="info-icon">💬</view>
+      <view class="info-title">我们很乐意听到您的声音</view>
+      <view class="info-desc">无论是产品建议、功能反馈，还是遇到的问题，都欢迎告诉我们</view>
+    </view>
+
+    <!-- 反馈表单 -->
+    <view class="form-section">
+      <view class="form-item">
+        <view class="form-label">反馈类型</view>
+        <picker mode="selector" range="{{feedbackTypes}}" value="{{feedbackTypes.indexOf(feedbackType)}}" bindchange="onTypeChange">
+          <view class="picker-value">{{feedbackType}} ›</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-item form-item--column">
+        <view class="form-label">反馈内容 <text class="required">*</text></view>
+        <textarea
+          class="form-textarea"
+          placeholder="请详细描述您的问题或建议..."
+          value="{{content}}"
+          bindinput="onContentInput"
+          maxlength="500"
+          auto-height
+        />
+        <view class="char-count">{{content.length}}/500</view>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-item">
+        <view class="form-label">联系方式（选填）</view>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="微信号/手机号/邮箱"
+          value="{{contact}}"
+          bindinput="onContactInput"
+        />
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="submit-btn" bindtap="submitFeedback">提交反馈</button>
+    </view>
+
+    <view class="tip-text">我们会尽快处理您的反馈，感谢支持！</view>
+
+  </view>
+</scroll-view>

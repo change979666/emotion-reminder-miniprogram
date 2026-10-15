@@ -1,0 +1,32 @@
+<navigation-bar title="关于我们" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 应用信息 -->
+    <view class="app-info">
+      <view class="app-logo">📮</view>
+      <view class="app-name">{{appName}}</view>
+      <view class="app-version">{{version}}</view>
+      <view class="app-slogan">记录当下，寄语未来</view>
+    </view>
+
+    <!-- 功能特性 -->
+    <view class="features">
+      <view class="feature-item" wx:for="{{features}}" wx:key="title">
+        <view class="feature-icon">{{item.icon}}</view>
+        <view class="feature-content">
+          <view class="feature-title">{{item.title}}</view>
+          <view class="feature-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 版权信息 -->
+    <view class="copyright">
+      <view class="copyright-text">© 2026 轻量化情感提醒助手</view>
+      <view class="copyright-text">用心记录每一份情感</view>
+    </view>
+
+  </view>
+</scroll-view>

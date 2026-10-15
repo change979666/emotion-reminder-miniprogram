@@ -1,0 +1,72 @@
+<navigation-bar title="偏好设置" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 内容偏好 -->
+    <view class="section">
+      <view class="section-title">内容偏好</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-label">默认心情标签</view>
+          <picker mode="selector" range="{{moodOptions}}" value="{{moodOptions.indexOf(preferences.defaultMood)}}" bindchange="onMoodChange">
+            <view class="picker-value">{{preferences.defaultMood}} ›</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+    <!-- 显示设置 -->
+    <view class="section">
+      <view class="section-title">显示设置</view>
+      <view class="list-group">
+        <view class="list-item list-item--column">
+          <view class="item-label">字体大小</view>
+          <view class="font-size-group">
+            <view
+              wx:for="{{fontSizeOptions}}"
+              wx:key="value"
+              class="font-size-item {{preferences.fontSize === item.value ? 'active' : ''}}"
+              data-value="{{item.value}}"
+              bindtap="onFontSizeChange"
+            >
+              {{item.label}}
+            </view>
+          </view>
+        </view>
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">深色模式</view>
+            <view class="item-desc">跟随系统或手动设置</view>
+          </view>
+          <switch
+            checked="{{preferences.darkMode}}"
+            data-key="darkMode"
+            bindchange="onSwitchChange"
+            color="#d97706"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 编辑设置 -->
+    <view class="section">
+      <view class="section-title">编辑设置</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">自动保存草稿</view>
+            <view class="item-desc">离开编辑页自动保存内容</view>
+          </view>
+          <switch
+            checked="{{preferences.autoSave}}"
+            data-key="autoSave"
+            bindchange="onSwitchChange"
+            color="#d97706"
+          />
+        </view>
+      </view>
+    </view>
+
+  </view>
+</scroll-view>

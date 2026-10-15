@@ -1,0 +1,53 @@
+<navigation-bar title="个人资料" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 头像 -->
+    <view class="form-section">
+      <view class="form-item">
+        <view class="form-label">头像</view>
+        <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <image class="avatar-img" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+          <view class="avatar-tip">点击更换</view>
+        </button>
+      </view>
+    </view>
+
+    <!-- 昵称 -->
+    <view class="form-section">
+      <view class="form-item">
+        <view class="form-label">昵称</view>
+        <input
+          class="form-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{userInfo.nickName}}"
+          bindinput="onNicknameInput"
+          bindblur="onNicknameBlur"
+          maxlength="20"
+        />
+      </view>
+    </view>
+
+    <!-- 个性签名 -->
+    <view class="form-section">
+      <view class="form-item form-item--column">
+        <view class="form-label">个性签名</view>
+        <textarea
+          class="form-textarea"
+          placeholder="写下你的个性签名..."
+          value="{{userInfo.signature}}"
+          bindfocus="onSignatureFocus"
+          bindinput="onSignatureInput"
+          bindblur="onSignatureBlur"
+          maxlength="50"
+          auto-height
+        />
+      </view>
+    </view>
+
+    <view class="tip-text">修改后自动保存</view>
+
+  </view>
+</scroll-view>

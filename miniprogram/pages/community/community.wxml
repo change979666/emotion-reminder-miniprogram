@@ -1,0 +1,106 @@
+<navigation-bar title="社区广场" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+  <view class="page {{themeClass}}">
+    <view class="hero">
+      <view class="hero-title">❤️ 想对谁说一句谢谢</view>
+      <view class="hero-subtitle">把爱与爱连接在对话，记录暖暖的温柔片段。</view>
+    </view>
+
+    <view class="tabs">
+      <view class="tab {{tab==='latest' ? 'tab--active' : ''}}" data-tab="latest" bindtap="onTabChange">最新</view>
+      <view class="tab {{tab==='hot' ? 'tab--active' : ''}}" data-tab="hot" bindtap="onTabChange">热门</view>
+    </view>
+
+    <view class="search-bar">
+      <view class="search-icon">🔍</view>
+      <input
+        class="search-input"
+        placeholder="找一封和你同频的信"
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+      />
+    </view>
+
+    <block wx:if="{{posts.length}}">
+      <view class="list">
+        <block wx:for="{{posts}}" wx:key="id">
+          <view class="post-card" data-id="{{item.id}}" bindtap="onPostClick">
+            <view class="post-doodle">{{item.doodle || '✨'}}</view>
+            <view class="post-header">
+              <view class="post-title">{{item.title}}</view>
+              <view class="post-date">{{item.targetDate}}</view>
+            </view>
+            <view class="post-content">{{item.content}}</view>
+            
+            <!-- 图片预览 -->
+            <view class="post-images" wx:if="{{item.images && item.images.length}}">
+              <block wx:for="{{item.images}}" wx:key="index" wx:for-item="img">
+                <image class="post-image" src="{{img}}" mode="aspectFill" wx:if="{{index < 3}}"></image>
+              </block>
+              <view class="image-count" wx:if="{{item.images.length > 3}}">+{{item.images.length - 3}}</view>
+            </view>
+            
+            <!-- 视频预览 -->
+            <view class="post-video" wx:if="{{item.videoPath}}">
+              <video class="video-preview" src="{{item.videoPath}}" poster="{{item.videoThumb}}" controls="{{false}}" show-center-play-btn="{{false}}"></video>
+              <view class="video-play-icon">▶️</view>
+              <view class="video-duration" wx:if="{{item.videoDuration}}">{{item.videoDuration}}</view>
+            </view>
+            
+            <!-- 匿名标签 -->
+            <view class="post-tags" wx:if="{{item.communityTags}}">
+              <block wx:for="{{availableTags}}" wx:key="id" wx:for-item="tag">
+                <view class="tag-item" data-post-id="{{item.id}}" data-tag-id="{{tag.id}}" catchtap="onTagClick">
+                  <text class="tag-emoji">{{tag.emoji}}</text>
+                  <text class="tag-text">{{tag.text}}</text>
+                  <text class="tag-count" wx:if="{{item.communityTags[tag.id]}}">{{item.communityTags[tag.id]}}</text>
+                </view>
+              </block>
+            </view>
+
+            <!-- 匿名短评预览 -->
+            <view class="post-comments-preview" wx:if="{{item.comments && item.comments.length}}">
+              <view class="comment-preview-item">
+                <text class="comment-preview-text">{{item.comments[0].text}}</text>
+              </view>
+              <view class="comment-preview-more" wx:if="{{item.comments.length > 1}}">
+                还有 {{item.comments.length - 1}} 条短评
+              </view>
+            </view>
+
+            <view class="post-footer">
+              <view class="post-meta">{{item.createdAtText}}</view>
+              <view class="post-actions">
+                <view class="action" data-id="{{item.id}}" bindtap="onLike" catchtap="onLike">共鸣 {{item.likeCount}}</view>
+                <view class="action" data-id="{{item.id}}" bindtap="onShowCommentInput" catchtap="onShowCommentInput">短评 {{item.comments ? item.comments.length : 0}}</view>
+              </view>
+            </view>
+
+            <!-- 短评输入框 -->
+            <view class="comment-input-box" wx:if="{{commentInputVisible === item.id}}" catchtap="stopPropagation">
+              <input 
+                class="comment-input" 
+                placeholder="10字以内..." 
+                maxlength="10"
+                bindinput="onCommentInput"
+                value="{{commentText}}"
+                focus="{{true}}"
+              />
+              <view class="comment-actions">
+                <button class="comment-btn comment-btn-cancel" bindtap="onCancelComment" catchtap="onCancelComment">取消</button>
+                <button class="comment-btn comment-btn-send" data-id="{{item.id}}" bindtap="onSubmitComment" catchtap="onSubmitComment">发送</button>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty">
+        <view class="empty-title">这里还很安静</view>
+        <view class="empty-subtitle">去「我的未来信箱」把一封信设置为“可分享”，就会出现在这里。</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+

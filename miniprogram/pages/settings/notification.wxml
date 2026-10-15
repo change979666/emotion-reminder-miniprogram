@@ -1,0 +1,81 @@
+<navigation-bar title="提醒设置" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 提醒开关 -->
+    <view class="section">
+      <view class="section-title">提醒开关</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">信件送达提醒</view>
+            <view class="item-desc">当未来信送达时通知您</view>
+          </view>
+          <switch
+            checked="{{notificationSettings.letterArrival}}"
+            data-key="letterArrival"
+            bindchange="onNotificationChange"
+            color="#d97706"
+          />
+        </view>
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">回信通知</view>
+            <view class="item-desc">收到解忧回信时提醒</view>
+          </view>
+          <switch
+            checked="{{notificationSettings.replyNotice}}"
+            data-key="replyNotice"
+            bindchange="onNotificationChange"
+            color="#d97706"
+          />
+        </view>
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">系统消息</view>
+            <view class="item-desc">接收系统通知和更新</view>
+          </view>
+          <switch
+            checked="{{notificationSettings.systemMessage}}"
+            data-key="systemMessage"
+            bindchange="onNotificationChange"
+            color="#d97706"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 勿扰模式 -->
+    <view class="section">
+      <view class="section-title">勿扰模式</view>
+      <view class="list-group">
+        <view class="list-item">
+          <view class="item-content">
+            <view class="item-label">开启勿扰模式</view>
+            <view class="item-desc">在设定时间段内关闭通知</view>
+          </view>
+          <switch
+            checked="{{notificationSettings.nightMode}}"
+            data-key="nightMode"
+            bindchange="onNotificationChange"
+            color="#d97706"
+          />
+        </view>
+        <view class="list-item" wx:if="{{notificationSettings.nightMode}}">
+          <view class="item-label">勿扰时段</view>
+          <view class="time-range">
+            <picker mode="time" value="{{nightModeTime.start}}" data-type="start" bindchange="onTimeChange">
+              <view class="time-value">{{nightModeTime.start}}</view>
+            </picker>
+            <text class="time-separator">至</text>
+            <picker mode="time" value="{{nightModeTime.end}}" data-type="end" bindchange="onTimeChange">
+              <view class="time-value">{{nightModeTime.end}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</scroll-view>

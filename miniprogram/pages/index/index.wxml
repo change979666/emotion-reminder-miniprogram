@@ -1,0 +1,202 @@
+<navigation-bar title="你好，这里是未来的信箱" back="{{false}}" color="black" background="#fdfcff">
+</navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <!-- 用户资料区域 -->
+    <view class="user-section">
+      <view class="user-card">
+        <view class="user-header">
+          <button
+            class="avatar-wrapper"
+            open-type="chooseAvatar"
+            bind:chooseavatar="onChooseAvatar"
+          >
+            <image class="avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+          </button>
+          <view class="user-info-wrap">
+            <view class="user-name">
+              <block wx:if="{{hasUserInfo && userInfo.nickName}}">
+                {{userInfo.nickName}}
+              </block>
+              <block wx:else>
+                微信用户
+              </block>
+            </view>
+            <view class="user-meta-row">
+              <text class="badge badge-id">ID {{shortUserId || '000000'}}</text>
+              <text class="badge badge-date">{{todayText}}</text>
+              <text class="badge badge-points" bindtap="goToTaskCenter">💎 {{userPoints}}积分</text>
+            </view>
+          </view>
+          <view class="achievements-corner" wx:if="{{achievements.continuousDays > 0 || achievements.totalPoints > 0}}">
+            <view class="achievement-badge" wx:if="{{achievements.continuousDays > 0}}">
+              <text class="achievement-icon">🔥</text>
+              <text class="achievement-text">{{achievements.continuousDays}}天</text>
+            </view>
+            <view class="achievement-points" wx:if="{{achievements.totalPoints > 0}}">
+              <text class="points-icon">⭐</text>
+              <text class="points-text">{{achievements.totalPoints}}</text>
+            </view>
+          </view>
+        </view>
+        <block wx:if="{{!hasUserInfo}}">
+          <view class="user-actions">
+            <block wx:if="{{canIUseNicknameComp}}">
+              <input
+                type="nickname"
+                class="nickname-input"
+                placeholder="给自己取一个小小的名字"
+                value="{{userInfo.nickName}}"
+                bindinput="onInputChange"
+                bindconfirm="onInputConfirm"
+                bindblur="onInputBlur"
+              />
+            </block>
+            <block wx:elif="{{canIUseGetUserProfile}}">
+              <button class="action-btn" bindtap="getUserProfile">同步微信头像昵称</button>
+            </block>
+          </view>
+        </block>
+      </view>
+
+      <!-- 登录引导提示 -->
+      <view class="login-guide" wx:if="{{!loggedIn}}">
+        <view class="guide-icon">👋</view>
+        <view class="guide-content">
+          <view class="guide-title">欢迎使用情感提醒助手</view>
+          <view class="guide-text">设置头像、昵称或绑定手机号，让你的信箱更个性化。数据将本地保存，随时可用。</view>
+        </view>
+      </view>
+
+      <!-- 介绍文字 -->
+      <view class="intro-text">{{todayMoodHint}}</view>
+
+      <!-- 统计卡片 -->
+      <view class="stats-container">
+        <view class="stat-item">
+          <view class="stat-icon">📮</view>
+          <view class="stat-number">{{stats.totalLetters}}</view>
+          <view class="stat-label">封写给未来的信</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-icon">✅</view>
+          <view class="stat-number">{{stats.deliveredLetters}}</view>
+          <view class="stat-label">封已送达</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-icon">🚀</view>
+          <view class="stat-number">{{stats.upcomingLetters}}</view>
+          <view class="stat-label">封在路上</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-icon">💌</view>
+          <view class="stat-number">{{stats.receivedReplies}}</view>
+          <view class="stat-label">封来自陌生人的温柔</view>
+        </view>
+      </view>
+
+      <!-- 今日心情快速入口 -->
+      <view class="quick-mood-card" bindtap="goWriteLetter">
+        <view class="quick-mood-icon">💭</view>
+        <view class="quick-mood-content">
+          <view class="quick-mood-title">今日心情</view>
+          <view class="quick-mood-hint">记录此刻的感受，写给未来的自己</view>
+        </view>
+        <view class="quick-mood-arrow">→</view>
+      </view>
+    </view>
+
+    <!-- 成就名片 -->
+    <view class="achievement-section">
+      <view class="achievement-header">
+        <view class="achievement-title">我的成就</view>
+        <view class="achievement-subtitle">每一步都值得被看见</view>
+      </view>
+      <view class="achievement-grid">
+        <block wx:for="{{achievementCards}}" wx:key="id">
+          <view class="achievement-card achievement-card--{{item.status}}">
+            <view class="achievement-icon">{{item.icon}}</view>
+            <view class="achievement-info">
+              <view class="achievement-name">{{item.title}}</view>
+              <view class="achievement-desc">{{item.subtitle}}</view>
+            </view>
+            <view class="achievement-progress">{{item.progressText}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 功能入口区域 -->
+    <view class="entry-section">
+      <view class="entry-grid">
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goWriteLetter">
+          <view class="grid-icon grid-icon--primary">✏️</view>
+          <view class="grid-label">写信</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goMyLetters">
+          <view class="grid-icon grid-icon--blue">📮</view>
+          <view class="grid-label">信箱</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goHelpWrite">
+          <view class="grid-icon grid-icon--purple">💬</view>
+          <view class="grid-label">解忧</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goMessages">
+          <view class="grid-icon grid-icon--green">
+            <text>🔔</text>
+            <view class="grid-badge" wx:if="{{unreadMessageCount > 0}}">
+              {{unreadMessageCount > 99 ? '99+' : unreadMessageCount}}
+            </view>
+          </view>
+          <view class="grid-label">消息</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goReport">
+          <view class="grid-icon grid-icon--orange">📊</view>
+          <view class="grid-label">成长报告</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goAchievements">
+          <view class="grid-icon grid-icon--gold">🏆</view>
+          <view class="grid-label">成就</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="goStickers">
+          <view class="grid-icon grid-icon--pink">
+            <text>🎁</text>
+            <view class="grid-badge" wx:if="{{newStickerCount > 0}}">
+              {{newStickerCount > 99 ? '99+' : newStickerCount}}
+            </view>
+          </view>
+          <view class="grid-label">贴纸</view>
+        </view>
+        <view class="grid-item" hover-class="grid-item-hover" bindtap="openSettings">
+          <view class="grid-icon grid-icon--gray">⚙️</view>
+          <view class="grid-label">设置</view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</scroll-view>
+
+<!-- 每日温柔签弹窗 -->
+<view class="daily-sign-mask" wx:if="{{showDailySign}}" bindtap="onCloseDailySign"></view>
+<view class="daily-sign-modal {{showDailySign ? 'daily-sign-modal--show' : ''}}" wx:if="{{showDailySign}}">
+  <view class="daily-sign-paper">
+    <view class="daily-sign-icon">🌸</view>
+    <view class="daily-sign-message">{{dailySignMessage}}</view>
+    <view class="daily-sign-moods">
+      <view class="daily-sign-mood-title">今天的心情</view>
+      <view class="daily-sign-mood-list">
+        <block wx:for="{{dailyMoodOptions}}" wx:key="id" wx:for-item="mood">
+          <view class="daily-sign-mood {{selectedDailyMood === mood.id ? 'daily-sign-mood--active' : ''}}" data-mood="{{mood.id}}" bindtap="onSelectDailyMood">
+            {{mood.label}}
+          </view>
+        </block>
+      </view>
+      <view class="daily-sign-mood-tip">签到后将解锁对应信纸皮肤</view>
+    </view>
+    <view class="daily-sign-date">{{todayText}}</view>
+  </view>
+  <button class="daily-sign-close" bindtap="onCloseDailySign">
+    收下这份温柔
+  </button>
+</view>

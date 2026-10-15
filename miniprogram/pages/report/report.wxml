@@ -1,0 +1,87 @@
+<navigation-bar title="时光成长报告" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    <!-- 头部卡片 -->
+    <view class="hero-card">
+      <view class="hero-icon">🌈</view>
+      <view class="hero-title">你的时光成长报告</view>
+      <view class="hero-subtitle">记录每一次成长的轨迹</view>
+    </view>
+
+    <!-- 基础数据 -->
+    <view class="section-card">
+      <view class="section-title">📊 基础数据</view>
+      <view class="stats-grid">
+        <view class="stat-box">
+          <view class="stat-value">{{totalLetters}}</view>
+          <view class="stat-label">封未来信</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-value">{{totalWords}}</view>
+          <view class="stat-label">字心路历程</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-value">{{helpedCount}}</view>
+          <view class="stat-label">位陌生人</view>
+        </view>
+        <view class="stat-box">
+          <view class="stat-value">{{continuousDays}}</view>
+          <view class="stat-label">天连续记录</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 关键词云 -->
+    <view class="section-card" wx:if="{{topKeywords.length}}">
+      <view class="section-title">☁️ 你最常提到的词</view>
+      <view class="keywords-cloud">
+        <block wx:for="{{topKeywords}}" wx:key="word">
+          <view class="keyword-tag" style="font-size: {{32 - index * 4}}rpx;">
+            {{item.word}}
+            <text class="keyword-count">×{{item.count}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 情绪趋势 -->
+    <view class="section-card">
+      <view class="section-title">💭 情绪趋势</view>
+      <view class="mood-card">
+        <view class="mood-text">{{moodTrend}}</view>
+      </view>
+    </view>
+
+    <!-- 成长故事 -->
+    <view class="section-card" wx:if="{{growthStory}}">
+      <view class="section-title">✨ 你的成长故事</view>
+      <view class="story-card">
+        <text class="story-text">{{growthStory}}</text>
+      </view>
+    </view>
+
+    <!-- 帮助他人 -->
+    <view class="section-card" wx:if="{{helpStats.repliedCount > 0}}">
+      <view class="section-title">🤝 帮助他人</view>
+      <view class="help-card">
+        <view class="help-row">
+          <text class="help-label">回复次数</text>
+          <text class="help-value">{{helpStats.repliedCount}} 次</text>
+        </view>
+        <view class="help-row">
+          <text class="help-label">平均字数</text>
+          <text class="help-value">{{helpStats.avgReplyWords}} 字</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分享按钮 -->
+    <view class="share-section">
+      <button class="share-btn" bindtap="onShareReport">
+        分享我的成长报告
+      </button>
+    </view>
+
+    <view class="bottom-safe" />
+  </view>
+</scroll-view>

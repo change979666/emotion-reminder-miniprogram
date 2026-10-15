@@ -1,0 +1,6 @@
+{
+  "AI_PROVIDER": "deepseek",
+  "AI_API_KEY": "YOUR_AI_API_KEY",
+  "AI_MODEL": "deepseek-chat",
+  "CLOUDBASE_APIKEY": ""
+}

@@ -1,0 +1,64 @@
+<navigation-bar title="消息" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <view class="help-status-section">
+      <view class="help-status-card" wx:if="{{helpStatus.hasHelp}}" bindtap="goHelpInbox">
+        <view class="help-card-header">
+          <view class="help-card-title-row">
+            <text class="help-card-icon">💌</text>
+            <text class="help-card-title">解忧信箱动态</text>
+          </view>
+        </view>
+        <view class="help-card-content">
+          <view class="help-card-item">
+            <text class="help-label">我的投递</text>
+            <text class="help-title">{{helpStatus.title}}</text>
+          </view>
+          <view class="help-card-footer">
+            <view class="help-status-btn {{helpStatus.replyCount > 0 ? 'has-reply' : 'waiting'}}">
+              {{helpStatus.statusLabel}}
+            </view>
+            <text class="help-time">{{helpStatus.createdAtText}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="help-status-empty" wx:else>
+        <view class="help-empty-title">解忧信箱动态</view>
+        <view class="help-empty-sub">还没有投递树洞信，去写一封吧。</view>
+        <button class="help-empty-btn" bindtap="goHelpIndex">去解忧</button>
+      </view>
+    </view>
+
+    <view class="summary" wx:if="{{messages.length}}">
+      <text class="summary-text">未读 {{unreadCount}} 条</text>
+      <button class="summary-btn" bindtap="onMarkAllRead" wx:if="{{unreadCount > 0}}">全部已读</button>
+    </view>
+
+    <block wx:if="{{messages.length}}">
+      <view class="list">
+        <block wx:for="{{messages}}" wx:key="id">
+          <view class="msg-item {{item.read ? '' : 'msg-item--unread'}}" data-id="{{item.id}}" data-post-id="{{item.postId}}" bindtap="onOpenMessage">
+            <view class="msg-title">
+              <text class="msg-type">{{item.typeLabel}}</text>
+              <text class="msg-time">{{item.createdAtText}}</text>
+            </view>
+            <view class="msg-body">
+              <text class="msg-main">{{item.mainText}}</text>
+              <text class="msg-sub" wx:if="{{item.subText}}">{{item.subText}}</text>
+            </view>
+            <view class="msg-dot" wx:if="{{!item.read}}"></view>
+          </view>
+        </block>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="empty">
+        <view class="empty-icon">✨</view>
+        <view class="empty-title">你的温柔还在等待共鸣</view>
+        <view class="empty-subtitle">去社区看看，或许会有意想不到的温暖～</view>
+        <button class="empty-btn" bindtap="goToCommunity">去社区广场</button>
+      </view>
+    </block>
+  </view>
+</scroll-view>

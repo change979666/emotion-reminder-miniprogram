@@ -1,0 +1,70 @@
+<navigation-bar title="树洞回信箱" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y refresher-enabled refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+  <view class="page {{themeClass}}">
+    <view class="cards-entry" bindtap="goCards">
+      <view class="cards-entry-icon">🧡</view>
+      <view class="cards-entry-content">
+        <view class="cards-entry-title">时光卡片生成器</view>
+        <view class="cards-entry-desc">把暖心回信做成海报，保存或分享</view>
+      </view>
+      <view class="cards-entry-action">进入</view>
+    </view>
+
+    <block wx:if="{{helps.length}}">
+      <view class="list">
+        <block wx:for="{{helps}}" wx:key="id">
+          <view class="help-card">
+            <view class="help-header">
+              <view class="help-title">{{item.title}}</view>
+              <view class="help-status {{item.status === 'replied' ? 'status-replied' : 'status-pending'}}">
+                {{item.status === 'replied' ? '已回复' : '待回复'}}
+              </view>
+            </view>
+            <view class="help-content">{{item.content}}</view>
+            
+            <!-- 预计回复时效 -->
+            <view class="reply-status" wx:if="{{item.status === 'pending' && item.expectedReplyTime}}">
+              <text class="status-icon">⏰</text>
+              <text class="status-text">{{item.expectedReplyTime}}</text>
+            </view>
+            
+            <!-- 回复进度条 -->
+            <view class="reply-progress" wx:if="{{item.expectedReplies > 0}}">
+              <view class="progress-bar">
+                <view class="progress-fill" style="width: {{(item.replies.length / item.expectedReplies) * 100}}%"></view>
+              </view>
+              <view class="progress-text">{{item.replies.length}}/{{item.expectedReplies}} 封回信</view>
+            </view>
+            
+            <view class="reply-count">共收到 {{item.replies.length}} 封回信</view>
+            <block wx:if="{{item.replies.length}}">
+              <view class="reply-list">
+                <block wx:for="{{item.replies}}" wx:key="_id" wx:for-item="reply">
+                  <view class="reply-item">
+                    <view class="reply-content">{{reply.content}}</view>
+                    <view class="reply-footer">
+                      <view class="reply-meta">{{reply.createdAtText}}</view>
+                      <view class="generate-card-btn" 
+                        data-help-id="{{item.id}}" 
+                        data-reply-content="{{reply.content}}"
+                        bindtap="onGenerateCard">
+                        生成治愈小纸条
+                      </view>
+                    </view>
+                  </view>
+                </block>
+              </view>
+            </block>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty">
+        <view class="empty-title">还没有树洞回信</view>
+        <view class="empty-subtitle">可以先去写一封小烦恼，或者等一等，让别人有时间看到你的信。</view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
+

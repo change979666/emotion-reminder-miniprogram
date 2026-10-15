@@ -1,0 +1,134 @@
+<navigation-bar title="任务中心" back="{{true}}" color="white" background="transparent"></navigation-bar>
+<view class="bg-gradient"></view>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <!-- 积分概况 -->
+    <view class="points-summary">
+      <view class="points-icon">💎</view>
+      <view class="points-content">
+        <view class="points-value">{{userPoints}}</view>
+        <view class="points-label">当前积分</view>
+      </view>
+      <view class="points-level">
+        <view class="level-badge">{{levelTitle}}</view>
+        <view class="level-progress">
+          <view class="level-progress-bar" style="width: {{levelProgress}}%"></view>
+        </view>
+        <view class="level-hint">{{levelHint}}</view>
+      </view>
+    </view>
+
+    <!-- 每日任务 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-title">📅 每日任务</view>
+        <view class="section-subtitle">今日已有{{dailyCompletedCount}}人完成</view>
+      </view>
+      <view class="task-list">
+        <block wx:for="{{dailyTasks}}" wx:key="id">
+          <view class="task-card task-card--{{item.status}}">
+            <view class="task-main">
+              <view class="task-icon">{{item.icon}}</view>
+              <view class="task-info">
+                <view class="task-title">{{item.title}}</view>
+                <view class="task-desc">{{item.desc}}</view>
+                <view class="task-progress">
+                  <view class="progress-text">{{item.current}}/{{item.target}}</view>
+                  <view class="progress-bar">
+                    <view class="progress-fill" style="width: {{(item.current / item.target * 100)}}%"></view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="task-reward">
+              <view class="reward-points">+{{item.points}}</view>
+              <button 
+                class="task-btn task-btn--{{item.status}}" 
+                data-id="{{item.id}}"
+                bindtap="onTaskAction"
+                disabled="{{item.status !== 'active' && item.status !== 'done'}}"
+              >
+                <block wx:if="{{item.status === 'locked'}}">未解锁</block>
+                <block wx:elif="{{item.status === 'active'}}">去完成</block>
+                <block wx:elif="{{item.status === 'done'}}">领取</block>
+                <block wx:else>已完成</block>
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 成就任务 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-title">🏆 成就任务</view>
+        <view class="section-subtitle">完成成就获得丰厚奖励</view>
+      </view>
+      <view class="task-list">
+        <block wx:for="{{achievementTasks}}" wx:key="id">
+          <view class="task-card task-card--{{item.status}} task-card--achievement">
+            <view class="task-main">
+              <view class="task-icon task-icon--large">{{item.icon}}</view>
+              <view class="task-info">
+                <view class="task-title">{{item.title}}</view>
+                <view class="task-subtitle">{{item.subtitle}}</view>
+                <view class="task-progress">
+                  <view class="progress-text">{{item.current}}/{{item.target}}</view>
+                  <view class="progress-bar">
+                    <view class="progress-fill" style="width: {{(item.current / item.target * 100)}}%"></view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="task-reward">
+              <view class="reward-badge">
+                <view class="reward-points">+{{item.points}}</view>
+                <view class="reward-extra" wx:if="{{item.reward}}">{{item.reward}}</view>
+              </view>
+              <button 
+                class="task-btn task-btn--{{item.status}}" 
+                data-id="{{item.id}}"
+                bindtap="onAchievementAction"
+                disabled="{{item.status !== 'done'}}"
+              >
+                <block wx:if="{{item.status === 'locked'}}">未开始</block>
+                <block wx:elif="{{item.status === 'active'}}">{{item.progressPercent}}%</block>
+                <block wx:elif="{{item.status === 'done'}}">领取</block>
+                <block wx:else>已完成</block>
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 积分记录 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-title">📝 积分记录</view>
+        <view class="section-subtitle">最近{{pointsHistory.length}}条记录</view>
+      </view>
+      <view class="history-list">
+        <block wx:for="{{pointsHistory}}" wx:key="id">
+          <view class="history-item">
+            <view class="history-icon">{{item.icon}}</view>
+            <view class="history-content">
+              <view class="history-title">{{item.title}}</view>
+              <view class="history-time">{{item.timeText}}</view>
+            </view>
+            <view class="history-points history-points--{{item.type}}">
+              {{item.type === 'earn' ? '+' : '-'}}{{item.points}}
+            </view>
+          </view>
+        </block>
+        <block wx:if="{{pointsHistory.length === 0}}">
+          <view class="empty-hint">
+            <view class="empty-icon">📭</view>
+            <view class="empty-text">还没有积分记录</view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+</scroll-view>

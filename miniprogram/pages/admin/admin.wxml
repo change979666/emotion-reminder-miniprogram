@@ -1,0 +1,68 @@
+<navigation-bar title="数据管理" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <view class="header">
+      <view class="header-icon">⚙️</view>
+      <view class="header-title">开发者工具</view>
+      <view class="header-desc">生成测试数据和管理功能</view>
+    </view>
+
+    <!-- 生成数据 -->
+    <view class="section">
+      <view class="section-title">生成测试数据</view>
+      <view class="card">
+        <view class="card-item">
+          <view class="item-label">生成信件数量</view>
+          <slider 
+            value="{{letterCount}}" 
+            min="3" 
+            max="20" 
+            step="1" 
+            show-value 
+            bindchange="onLetterCountChange"
+            activeColor="#f97316"
+          />
+        </view>
+        
+        <button class="action-btn" bindtap="generateData" disabled="{{generating}}">
+          {{generating ? '生成中...' : '🚀 生成测试数据'}}
+        </button>
+        
+        <view class="tip-text">将生成 {{letterCount}} 封信件和若干求助信</view>
+      </view>
+    </view>
+
+    <!-- 清空数据 -->
+    <view class="section">
+      <view class="section-title">数据清理</view>
+      <view class="card">
+        <button class="action-btn action-btn--danger" bindtap="clearLocalData">
+          🗑️ 清空本地数据
+        </button>
+        <view class="tip-text">仅清除本地缓存，不影响云端数据</view>
+      </view>
+    </view>
+
+    <!-- 初始化贴纸 -->
+    <view class="section">
+      <view class="section-title">贴纸系统</view>
+      <view class="card">
+        <button class="action-btn" bindtap="initStickers" disabled="{{initingStickers}}">
+          {{initingStickers ? '初始化中...' : '🎁 初始化贴纸数据'}}
+        </button>
+        <view class="tip-text">将 130 个贴纸定义导入云数据库</view>
+      </view>
+    </view>
+
+    <!-- 状态信息 -->
+    <view class="section" wx:if="{{statusMessage}}">
+      <view class="status-card {{statusType === 'success' ? 'status-card--success' : 'status-card--error'}}">
+        <view class="status-icon">{{statusType === 'success' ? '✅' : '❌'}}</view>
+        <view class="status-message">{{statusMessage}}</view>
+      </view>
+    </view>
+
+  </view>
+</scroll-view>

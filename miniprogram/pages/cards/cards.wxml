@@ -1,0 +1,37 @@
+<navigation-bar title="时光卡片生成器" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <view class="hero-card">
+      <view class="hero-title">把温柔做成一张小纸条</view>
+      <view class="hero-subtitle">从治愈回信或时光目标中选择内容，生成可以保存的海报。</view>
+    </view>
+
+    <view class="card-list" wx:if="{{cards.length}}">
+      <block wx:for="{{cards}}" wx:key="id">
+        <view class="card-item {{selectedCard && selectedCard.id === item.id ? 'card-item--active' : ''}}" data-id="{{item.id}}" bindtap="onSelectCard">
+          <view class="card-type">{{item.type === 'time' ? '时光对比卡片' : '治愈小纸条'}}</view>
+          <view class="card-quote" wx:if="{{item.type === 'healing'}}">{{item.quote}}</view>
+          <view class="card-quote" wx:else>当时的期待：{{item.target}}</view>
+          <view class="card-sub" wx:if="{{item.type === 'time'}}">现在的结果：{{item.result}}</view>
+          <view class="card-date">{{item.createdAtText}}</view>
+        </view>
+      </block>
+    </view>
+
+    <view class="empty" wx:else>
+      <view class="empty-title">还没有时光卡片</view>
+      <view class="empty-subtitle">去解忧回信或拆信详情里生成一张吧～</view>
+    </view>
+
+    <view class="actions" wx:if="{{cards.length}}">
+      <button class="action-btn" loading="{{generating}}" bindtap="onGeneratePoster">生成海报</button>
+      <button class="action-btn action-btn--ghost" bindtap="onSavePoster">保存到相册</button>
+    </view>
+
+    <view class="preview" wx:if="{{posterPath}}">
+      <image class="preview-image" src="{{posterPath}}" mode="widthFix" />
+    </view>
+
+    <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
+  </view>
+</scroll-view>

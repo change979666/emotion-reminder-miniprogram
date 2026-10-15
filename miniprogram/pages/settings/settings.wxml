@@ -1,0 +1,107 @@
+<navigation-bar title="设置" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <!-- 个人信息卡片 -->
+    <view class="user-card">
+      <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <view class="user-info">
+        <view class="user-name">{{userInfo.nickName}}</view>
+        <view class="user-id">ID: {{userId}}</view>
+      </view>
+    </view>
+
+    <!-- 账户设置 -->
+    <view class="section">
+      <view class="section-title">账户设置</view>
+      <view class="list-group">
+        <view class="list-item" bindtap="goToProfile">
+          <view class="item-left">
+            <text class="item-icon">👤</text>
+            <text class="item-text">个人资料</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+        <view class="list-item" bindtap="goToAccount">
+          <view class="item-left">
+            <text class="item-icon">🔒</text>
+            <text class="item-text">账号与隐私</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能设置 -->
+    <view class="section">
+      <view class="section-title">功能设置</view>
+      <view class="list-group">
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToNotification">
+          <view class="item-left">
+            <text class="item-icon">🔔</text>
+            <text class="item-text">提醒设置</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToPreferences">
+          <view class="item-left">
+            <text class="item-icon">💭</text>
+            <text class="item-text">偏好设置</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 其他 -->
+    <view class="section">
+      <view class="section-title">其他</view>
+      <view class="list-group">
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToAdmin" wx:if="{{isDev}}">
+          <view class="item-left">
+            <text class="item-icon">⚙️</text>
+            <text class="item-text">数据管理</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToAgreement">
+          <view class="item-left">
+            <text class="item-icon">📜</text>
+            <text class="item-text">平台协议</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToAbout">
+          <view class="item-left">
+            <text class="item-icon">ℹ️</text>
+            <text class="item-text">关于我们</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+        <view class="list-item" hover-class="list-item-hover" bindtap="goToContact">
+          <view class="item-left">
+            <text class="item-icon">💬</text>
+            <text class="item-text">联系客服</text>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 退出登录 -->
+    <view class="section">
+      <view class="list-group">
+        <view class="list-item list-item--danger" hover-class="list-item-hover" bindtap="handleLogout">
+          <view class="item-left">
+            <text class="item-text">退出登录</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 版本信息 -->
+    <view class="version-info">版本 {{version}}</view>
+
+  </view>
+</scroll-view>

@@ -1,0 +1,81 @@
+<navigation-bar title="平台协议" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page">
+    
+    <view class="article">
+      <view class="article-title">用户服务协议</view>
+      <view class="article-date">更新时间：{{updateTime}}</view>
+
+      <view class="article-section">
+        <view class="section-title">一、服务说明</view>
+        <view class="section-content">
+          轻量化情感提醒助手（以下简称"本服务"）是一款帮助用户记录当下、寄语未来的情感日记应用。我们致力于为您提供安全、私密、温暖的情感记录空间。
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">二、账号管理</view>
+        <view class="section-content">
+          1. 用户需通过微信授权登录使用本服务\n
+          2. 每个微信账号仅可注册一个用户账户\n
+          3. 用户应妥善保管账号信息，对账号下的所有行为负责\n
+          4. 禁止转让、出借或以其他方式提供账号给第三方使用
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">三、隐私保护</view>
+        <view class="section-content">
+          1. 本服务使用微信云开发，您的数据安全存储在微信官方云数据库中\n
+          2. 我们严格遵守数据安全规范，不会主动收集、使用或泄露您的个人隐私信息\n
+          3. 解忧信箱功能中的内容将匿名展示，保护您的隐私\n
+          4. 我们承诺不会将您的数据用于商业目的\n
+          5. 数据仅用于提供服务功能，您可随时申请删除账号及相关数据
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">四、内容规范</view>
+        <view class="section-content">
+          用户在使用本服务时，不得发布以下内容：\n
+          1. 违反法律法规的内容\n
+          2. 涉及政治敏感话题的内容\n
+          3. 侵犯他人合法权益的内容\n
+          4. 包含暴力、色情、赌博等不良信息\n
+          5. 恶意骚扰、诽谤他人的内容
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">五、免责声明</view>
+        <view class="section-content">
+          1. 本服务按"现状"提供，不对服务的准确性、可靠性做任何保证\n
+          2. 用户应自行备份重要数据，因设备故障等原因导致的数据丢失，本服务不承担责任\n
+          3. 本服务不对用户间的交互内容负责
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">六、协议修订</view>
+        <view class="section-content">
+          本协议可能会不定期更新，更新后的协议将在应用内公示。继续使用本服务即表示您同意更新后的协议。
+        </view>
+      </view>
+
+      <view class="article-section">
+        <view class="section-title">七、小程序备案</view>
+        <view class="section-content">
+          本小程序已完成备案登记\n
+          备案状态：已备案\n
+          备案号：豫ICP备2025114160号-1X
+        </view>
+      </view>
+
+      <view class="article-footer">
+        如有疑问，请通过"联系客服"与我们取得联系。
+      </view>
+    </view>
+
+  </view>
+</scroll-view>

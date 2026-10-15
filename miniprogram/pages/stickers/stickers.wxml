@@ -1,0 +1,93 @@
+<navigation-bar title="我的贴纸" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <!-- 顶部统计 -->
+    <view class="stats-card">
+      <view class="stat-item">
+        <view class="stat-number">{{ownedCount}}</view>
+        <view class="stat-label">已收集</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-number">{{totalCount}}</view>
+        <view class="stat-label">总贴纸</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-number">{{newCount}}</view>
+        <view class="stat-label">新获得</view>
+      </view>
+    </view>
+
+    <!-- 分类标签 -->
+    <view class="category-tabs">
+      <view 
+        class="tab-item {{currentCategory === item.id ? 'tab-item--active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onCategoryChange"
+      >
+        {{item.name}}
+      </view>
+    </view>
+
+    <!-- 贴纸网格 -->
+    <view class="stickers-grid">
+      <block wx:for="{{filteredStickers}}" wx:key="id">
+        <view 
+          class="sticker-card {{item.owned ? 'sticker-card--owned' : 'sticker-card--locked'}}"
+          data-id="{{item.id}}"
+          bindtap="onStickerClick"
+        >
+          <view class="sticker-badge" wx:if="{{item.isNew}}">新</view>
+          
+          <view class="sticker-emoji">{{item.emoji}}</view>
+          <view class="sticker-name">{{item.name}}</view>
+          
+          <view class="sticker-lock" wx:if="{{!item.owned}}">
+            <text class="lock-icon">🔒</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{filteredStickers.length === 0}}">
+      <view class="empty-icon">📦</view>
+      <view class="empty-text">这个分类还没有贴纸哦</view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 贴纸详情弹窗 -->
+<view class="modal-mask" wx:if="{{showDetail}}" bindtap="onCloseDetail"></view>
+<view class="sticker-detail {{showDetail ? 'sticker-detail--show' : ''}}" wx:if="{{selectedSticker}}">
+  <view class="detail-header">
+    <view class="detail-emoji">{{selectedSticker.emoji}}</view>
+    <view class="detail-close" bindtap="onCloseDetail">✕</view>
+  </view>
+  
+  <view class="detail-name">{{selectedSticker.name}}</view>
+  <view class="detail-quote">「{{selectedSticker.quote}}」</view>
+  
+  <view class="detail-info">
+    <view class="info-item">
+      <text class="info-label">分类</text>
+      <text class="info-value">{{selectedSticker.categoryName}}</text>
+    </view>
+    <view class="info-item" wx:if="{{selectedSticker.owned}}">
+      <text class="info-label">获得时间</text>
+      <text class="info-value">{{selectedSticker.obtainedText}}</text>
+    </view>
+    <view class="info-item" wx:if="{{selectedSticker.owned}}">
+      <text class="info-label">来源</text>
+      <text class="info-value">{{selectedSticker.sourceText}}</text>
+    </view>
+  </view>
+  
+  <view class="detail-hint" wx:if="{{!selectedSticker.owned}}">
+    <text class="hint-icon">💡</text>
+    <text class="hint-text">{{selectedSticker.obtainHint}}</text>
+  </view>
+</view>

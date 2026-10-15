@@ -1,0 +1,30 @@
+/* 信封展开与信纸滑出动效 */
+@keyframes envelope-open {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  60% {
+    transform: translateY(-16rpx) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(-120rpx) rotate(180deg);
+  }
+}
+
+@keyframes paper-slide {
+  0% {
+    opacity: 0;
+    transform: translateY(80rpx) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes envelope-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4rpx); }
+  50% { transform: translateX(4rpx); }
+  75% { transform: translateX(-2rpx); }
+}

@@ -1,0 +1,206 @@
+<navigation-bar title="写给未来的自己" back="{{true}}" color="black" background="#fdfcff"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page {{themeClass}}">
+    <view class="hero-card">
+      <view class="hero-title">写一封给未来的信</view>
+      <view class="hero-subtitle">把当下的情绪、期待和困惑，留给未来的自己慢慢拆开。</view>
+      <view class="template-link" bindtap="showTemplateModal">
+        <text class="template-icon">📝</text>
+        <text class="template-text">试试信件模板</text>
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="field">
+        <view class="field-label">{{copywriting.write.titleLabel}}</view>
+        <input
+          class="field-input"
+          placeholder="{{copywriting.write.titlePlaceholder}}"
+          maxlength="40"
+          bindinput="onTitleChange"
+          value="{{title}}"
+        />
+      </view>
+
+      <view class="field">
+        <view class="field-label">内容</view>
+        <textarea
+          class="field-textarea"
+          placeholder="想说什么都可以，可以是情绪、愿望、提醒、对自己的鼓励……"
+          auto-height
+          maxlength="1000"
+          bindinput="onContentChange"
+          value="{{content}}"
+        />
+        <view class="field-helper">
+          <text>{{content.length}} / 1000</text>
+          <text class="auto-save-hint" wx:if="{{autoSaveStatus}}">{{autoSaveStatus}}</text>
+        </view>
+      </view>
+
+      <!-- AI 辅助功能按钮 -->
+      <view class="ai-tools">
+        <button class="ai-tool-btn" bindtap="onAIGenerate" disabled="{{aiGenerating}}">
+          {{aiGenerating ? '生成中...' : '✨ AI 生成开头'}}
+        </button>
+        <button class="ai-tool-btn" bindtap="onAIAnalyze" disabled="{{aiAnalyzing}}">
+          {{aiAnalyzing ? '分析中...' : '🔍 情感分析'}}
+        </button>
+        <button class="ai-tool-btn" bindtap="onAIOptimize" disabled="{{aiOptimizing}}">
+          {{aiOptimizing ? '优化中...' : '💡 AI 优化'}}
+        </button>
+      </view>
+
+      <view class="field">
+        <view class="field-label">想在什么时候收到？</view>
+        <picker mode="date" value="{{targetDate}}" start="{{minDate}}" bindchange="onDateChange">
+          <view class="picker-display">
+            <text wx:if="{{targetDate}}">{{targetDate}}</text>
+            <text wx:else>{{copywriting.write.datePlaceholder}}</text>
+          </view>
+        </picker>
+        <view class="field-helper field-helper-tip">🔔 到期会自动推送提醒</view>
+      </view>
+
+      <view class="field field-row">
+        <view class="field-label">到期提醒</view>
+        <switch checked="{{remindEnabled}}" bindchange="onRemindChange" />
+      </view>
+
+      <view class="field">
+        <view class="field-label">此刻的心情</view>
+        <view class="mood-tags">
+          <block wx:for="{{moodOptions}}" wx:key="value">
+            <view
+              class="mood-tag {{item.value === selectedMood ? 'mood-tag--active' : ''}}"
+              data-value="{{item.value}}"
+              bindtap="onSelectMood"
+            >
+              {{item.label}}
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">信件分类</view>
+        <picker mode="selector" range="{{categoryOptions}}" bindchange="onCategoryChange">
+          <view class="picker-display">
+            <text>{{selectedCategory}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <view class="field-label">标签（最多5个）</view>
+        <view class="tag-input-row">
+          <input class="field-input" placeholder="如：成长、期待" value="{{tagsInput}}" bindinput="onTagsInput" />
+          <button class="tag-add-btn" bindtap="onAddTags">添加</button>
+        </view>
+        <view class="tag-list" wx:if="{{tags.length}}">
+          <block wx:for="{{tags}}" wx:key="item">
+            <view class="tag-chip" data-tag="{{item}}" bindtap="onRemoveTag">{{item}} ×</view>
+          </block>
+        </view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">附加小目标（可选）</view>
+        <input
+          class="field-input"
+          placeholder="例如：3个月后我要瘦5斤"
+          value="{{targetText}}"
+          maxlength="50"
+          bindinput="onTargetInput"
+        />
+      </view>
+
+      <view class="field field-row">
+        <view class="field-label">可分享（匿名）</view>
+        <switch checked="{{shareable}}" bindchange="onShareableChange" />
+      </view>
+
+      <view class="field field-row">
+        <view class="field-label">信件加密</view>
+        <switch checked="{{encryptEnabled}}" bindchange="onEncryptChange" />
+      </view>
+
+      <view class="field">
+        <view class="field-label">写信定位（可选）</view>
+        <view class="location-row">
+          <button class="tag-add-btn" bindtap="onChooseLocation">记录定位</button>
+          <text class="location-text">{{locationText || '未记录定位'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 时光彩蛋独立区域 -->
+    <view class="capsule-card">
+      <view class="capsule-header">
+        <view class="capsule-title">🎁 时光彩蛋（可选）</view>
+        <view class="capsule-subtitle">给未来的自己留下此刻的影像或声音</view>
+      </view>
+      <view class="capsule-row">
+        <view class="capsule-item" bindtap="onChooseImages">
+          <view class="capsule-icon capsule-icon-image">📸</view>
+          <view class="capsule-content">
+            <view class="capsule-text">
+              <text wx:if="{{capsuleImages.length > 0}}">已添加{{capsuleImages.length}}张照片</text>
+              <text wx:else>添加照片（最多9张）</text>
+            </view>
+          </view>
+        </view>
+        <view class="capsule-item" bindtap="onChooseVideo">
+          <view class="capsule-icon capsule-icon-video">🎬</view>
+          <view class="capsule-content">
+            <view class="capsule-text">
+              <text wx:if="{{capsuleVideoPath}}">已添加视频</text>
+              <text wx:else>添加一段视频</text>
+            </view>
+          </view>
+        </view>
+        <view class="capsule-item" bindtap="onToggleRecord">
+          <view class="capsule-icon capsule-icon-audio">🎤</view>
+          <view class="capsule-content">
+            <view class="capsule-text">
+              <text wx:if="{{capsuleAudioPath}}">已录制一段语音</text>
+              <text wx:elif="{{isRecording}}">录音中，点击结束</text>
+              <text wx:else>录一段 30 秒内语音</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 信件模板弹窗 -->
+    <view class="template-modal" wx:if="{{showTemplates}}" bindtap="hideTemplateModal">
+      <view class="template-content" catchtap="stopPropagation">
+        <view class="template-header">
+          <view class="template-title">选择信件模板</view>
+          <view class="template-close" bindtap="hideTemplateModal">✕</view>
+        </view>
+        <view class="template-list">
+          <block wx:for="{{templates}}" wx:key="id">
+            <view class="template-item" data-template="{{item}}" bindtap="useTemplate">
+              <view class="template-item-title">{{item.title}}</view>
+              <view class="template-item-preview">{{item.prefix}}</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-safe" />
+
+    <view class="submit-bar">
+      <button
+        class="primary-btn"
+        loading="{{submitting}}"
+        disabled="{{submitting}}"
+        bindtap="onSubmit"
+      >
+        投递到未来
+      </button>
+    </view>
+  </view>
+</scroll-view>

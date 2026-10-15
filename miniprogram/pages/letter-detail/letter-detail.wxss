@@ -1,0 +1,452 @@
+@import "/styles/animation.wxss";
+
+page {
+  height: 100vh;
+  background: linear-gradient(180deg, #fef3c7 0%, #fdfcff 30%, #fce7f3 100%);
+}
+
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.skin-toolbar {
+  margin: 24rpx 32rpx 0;
+  padding: 20rpx 22rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10rpx 24rpx rgba(217, 119, 6, 0.12);
+}
+
+.skin-title {
+  font-size: 26rpx;
+  color: #7c3a1d;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.skin-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.skin-chip {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 22rpx;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.skin-chip--active {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+  border-color: transparent;
+}
+
+.sound-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 22rpx;
+  color: #7c3a1d;
+}
+
+.sound-icon {
+  font-size: 28rpx;
+}
+
+.sound-text {
+  font-size: 22rpx;
+}
+
+/* 信封区域 */
+.envelope-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 40rpx;
+}
+
+.envelope {
+  width: 500rpx;
+  height: 600rpx;
+  padding: 60rpx 40rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #fff1f2, #fef3c7);
+  box-shadow: 0 24rpx 60rpx rgba(217, 119, 6, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s ease;
+}
+
+.envelope::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition: transform 0.8s ease;
+}
+
+.envelope--opening {
+  transform: scale(1.05);
+  animation: envelope-shake 0.6s ease-in-out;
+}
+
+.envelope--opening::before {
+  animation: envelope-open 0.9s ease-in-out forwards;
+}
+
+.envelope-icon {
+  font-size: 120rpx;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20rpx); }
+}
+
+.envelope-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #92400e;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.envelope-hint {
+  font-size: 24rpx;
+  color: #a16207;
+  opacity: 0.8;
+}
+
+/* 内容区域 */
+.content-section {
+  height: 100%;
+  overflow-y: auto;
+  flex: 1;
+  opacity: 0;
+  transform: translateY(40rpx);
+  transition: all 0.6s ease;
+}
+
+.content-section--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.letter-card {
+  margin: 32rpx;
+  padding: 40rpx 32rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12rpx 40rpx rgba(217, 119, 6, 0.15);
+  animation: slideUp 0.8s ease-out;
+}
+
+.skin-sakura .letter-card {
+  background: linear-gradient(135deg, rgba(255, 228, 239, 0.9), rgba(255, 247, 237, 0.95));
+  box-shadow: 0 12rpx 40rpx rgba(244, 114, 182, 0.2);
+}
+
+.skin-star .letter-card {
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.9), rgba(199, 210, 254, 0.9));
+  box-shadow: 0 12rpx 40rpx rgba(99, 102, 241, 0.2);
+}
+
+.skin-sakura .letter-title,
+.skin-sakura .letter-content {
+  color: #9d174d;
+}
+
+.skin-star .letter-title,
+.skin-star .letter-content {
+  color: #1e3a8a;
+}
+
+.paper-sheet {
+  animation: paper-slide 0.8s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(60rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx dashed rgba(217, 119, 6, 0.3);
+}
+
+.letter-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #065f46;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.letter-date {
+  font-size: 24rpx;
+  color: #92400e;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.letter-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #78350f;
+  margin-bottom: 24rpx;
+  line-height: 1.5;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.letter-content {
+  font-size: 28rpx;
+  color: #92400e;
+  line-height: 2;
+  margin-bottom: 32rpx;
+  white-space: pre-wrap;
+  font-family: 'STKaiti', 'KaiTi', serif;
+  letter-spacing: 1rpx;
+}
+
+.unlock-btn {
+  padding: 14rpx 24rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+  font-size: 24rpx;
+  border: none;
+}
+
+.target-card {
+  margin: 0 32rpx 24rpx;
+  padding: 24rpx 22rpx;
+  border-radius: 20rpx;
+  background: rgba(254, 243, 199, 0.6);
+  border: 1px dashed rgba(217, 119, 6, 0.4);
+}
+
+.target-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #78350f;
+  margin-bottom: 10rpx;
+}
+
+.target-text {
+  font-size: 26rpx;
+  color: #92400e;
+  line-height: 1.6;
+  margin-bottom: 12rpx;
+}
+
+.target-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.target-card-actions {
+  margin-top: 16rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.target-chip {
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: #fff7ed;
+  color: #92400e;
+  font-size: 22rpx;
+}
+
+.target-chip--active {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+}
+
+.letter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid rgba(217, 119, 6, 0.2);
+}
+
+.letter-actions {
+  margin-top: 16rpx;
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-chip {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #f3f4f6;
+  color: #7c3a1d;
+  font-size: 22rpx;
+  border: none;
+}
+
+.letter-mood,
+.letter-created {
+  font-size: 22rpx;
+  color: #a16207;
+}
+
+/* 感想展示 */
+.reflection-display {
+  margin: 0 32rpx 32rpx;
+  padding: 28rpx 24rpx;
+  border-radius: 20rpx;
+  background: rgba(253, 224, 71, 0.2);
+  border: 2rpx dashed #fbbf24;
+}
+
+.reflection-label {
+  font-size: 24rpx;
+  color: #92400e;
+  margin-bottom: 12rpx;
+  font-weight: 600;
+}
+
+.reflection-content {
+  font-size: 26rpx;
+  color: #78350f;
+  line-height: 1.8;
+  margin-bottom: 16rpx;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.edit-reflection-btn {
+  padding: 12rpx 24rpx;
+  border-radius: 999rpx;
+  background: #fbbf24;
+  color: #fff;
+  font-size: 24rpx;
+  border: none;
+}
+
+/* 时光小提问弹窗 */
+.reflection-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8rpx);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.reflection-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  border-radius: 32rpx 32rpx 0 0;
+  background: #fff;
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reflection-modal--show {
+  transform: translateY(0);
+}
+
+.reflection-header {
+  margin-bottom: 24rpx;
+}
+
+.reflection-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #78350f;
+  margin-bottom: 12rpx;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.reflection-subtitle {
+  font-size: 24rpx;
+  color: #a16207;
+  font-family: 'STKaiti', 'KaiTi', serif;
+}
+
+.reflection-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #fef3c7;
+  font-size: 26rpx;
+  color: #78350f;
+  line-height: 1.8;
+  margin-bottom: 24rpx;
+  font-family: 'STKaiti', 'KaiTi', serif;
+  box-sizing: border-box;
+}
+
+.reflection-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.target-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.reflection-btn {
+  flex: 1;
+  padding: 24rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.reflection-btn--cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.reflection-btn--save {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(251, 191, 36, 0.4);
+}
+
+.bottom-safe {
+  height: 60rpx;
+}

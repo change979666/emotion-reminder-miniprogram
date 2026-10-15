@@ -1,0 +1,145 @@
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff7ed;
+}
+
+.scrollarea {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.page {
+  padding: 24rpx 28rpx 120rpx;
+}
+
+.hero-card {
+  padding: 28rpx 24rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, rgba(253, 224, 71, 0.35), rgba(251, 191, 36, 0.25));
+  margin-bottom: 20rpx;
+}
+
+.hero-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #78350f;
+  margin-bottom: 8rpx;
+}
+
+.hero-subtitle {
+  font-size: 24rpx;
+  color: #92400e;
+  line-height: 1.6;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.card-item {
+  padding: 22rpx 20rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(217, 119, 6, 0.1);
+  border: 2rpx solid transparent;
+}
+
+.card-item--active {
+  border-color: #f59e0b;
+  background: rgba(254, 243, 199, 0.8);
+}
+
+.card-type {
+  font-size: 20rpx;
+  color: #b45309;
+  margin-bottom: 6rpx;
+  font-weight: 600;
+}
+
+.card-quote {
+  font-size: 26rpx;
+  color: #78350f;
+  line-height: 1.8;
+  margin-bottom: 8rpx;
+}
+
+.card-sub {
+  font-size: 24rpx;
+  color: #92400e;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}
+
+.card-date {
+  font-size: 20rpx;
+  color: #a16207;
+}
+
+.actions {
+  margin-top: 20rpx;
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 18rpx 20rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.action-btn--ghost {
+  background: #fff1f2;
+  color: #d97706;
+}
+
+.preview {
+  margin-top: 24rpx;
+  padding: 16rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 24rpx rgba(217, 119, 6, 0.1);
+}
+
+.preview-image {
+  width: 100%;
+  border-radius: 16rpx;
+}
+
+.poster-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: -9999rpx;
+  width: 900rpx;
+  height: 1200rpx;
+}
+
+.empty {
+  margin-top: 24rpx;
+  padding: 36rpx 28rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.empty-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #7c3a1d;
+  margin-bottom: 8rpx;
+}
+
+.empty-subtitle {
+  font-size: 24rpx;
+  color: #a0643f;
+  line-height: 1.6;
+}
