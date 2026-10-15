@@ -1,0 +1,15 @@
+# 微信开发者工具本地私有配置（含个人编译设置/项目名，不应提交）
+project.private.config.json
+
+# 小程序 npm 构建产物
+miniprogram_npm/
+
+# Node
+node_modules/
+
+# 云函数本地依赖
+cloudfunctions/*/node_modules/
+
+# 日志与系统文件
+*.log
+.DS_Store

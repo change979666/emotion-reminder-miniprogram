@@ -2,7 +2,7 @@
 
 一个面向“写给未来的自己”的轻量微信小程序：写信、投递到未来、信箱查看，并支持将部分信件**匿名发布到社区广场**。
 
-> **数据存储方案**：微信云开发  
+> **数据存储方案**：微信云开发
 > 使用**云数据库**存储用户数据，配合**云函数**处理业务逻辑，支持**订阅消息**提醒功能。数据安全存储在微信官方云端，支持多设备同步。
 
 ## 功能概览
@@ -50,9 +50,10 @@
 ## 快速开始
 
 ### 前置准备
-1. 注册微信小程序账号
-2. 开通云开发服务
-3. 在微信开发者工具中配置云开发环境
+1. 在[微信公众平台](https://mp.weixin.qq.com/)注册你自己的小程序账号，拿到自己的 **AppID**（本仓库 `project.config.json` 中的 `appid` 为作者示例，导入项目时请在微信开发者工具中替换为你自己的 AppID，不要沿用作者的）
+2. 安装[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+3. 开通云开发服务
+4. 在微信开发者工具中配置云开发环境
 
 ### 本地开发
 1. 使用微信开发者工具打开本项目（根目录）
@@ -60,6 +61,8 @@
 3. 部署云函数到云端
 4. 初始化云数据库集合
 5. 开始调试
+
+> 注：`project.private.config.json` 是微信开发者工具生成的**本地私有配置**（编译设置、项目名等），属于个人本地文件，已通过 `.gitignore` 排除、不纳入版本管理；你的本地该文件不会被提交，也不依赖仓库中的同名文件。
 
 ## 云开发配置
 
@@ -109,14 +112,31 @@ App<IAppOption>({
 
 ### 4）部署云函数
 
-项目已提供云函数目录：
+项目已提供云函数目录（每个目录都含 `index.js` 与 `package.json`，在开发者工具中右键「上传并部署：云端安装依赖」）：
 
 - `cloudfunctions/login`：获取用户 openid
-- `cloudfunctions/reminder`：定时扫描并发送订阅消息
+- `cloudfunctions/reminder`：定时扫描并发送订阅消息（需配置定时触发器）
 - `cloudfunctions/letters`：信件数据操作
+- `cloudfunctions/comments`：社区评论操作
+- `cloudfunctions/notifications`：消息通知
 - `cloudfunctions/phone`：获取用户手机号
+- `cloudfunctions/contentCheck`：内容安全校验
+- `cloudfunctions/stickers`：贴纸数据
+- `cloudfunctions/seed`：数据库初始化种子
+- `cloudfunctions/ai`：调用第三方 AI 服务（按下面第 6 节配置 key 后才可用）
 
-在开发者工具的"云开发"面板中上传并部署这些云函数。
+### 6）配置 AI API Key（可选）
+
+`cloudfunctions/ai/index.js` 不内置任何密钥，全部从**云开发控制台的环境变量**读取：
+
+- `AI_PROVIDER`：`openai` / `deepseek` / `qwen` / `wenxin` / `zhipu` / `custom`
+- `AI_API_KEY`：对应服务商的 API Key（**必填**，未配置时云函数会报 "API Key not configured"）
+- `AI_MODEL`：模型名（如 `deepseek-chat`）
+- `AI_API_BASE`：自定义接口地址（可选）
+
+配置路径：微信开发者工具 → 云开发 → 云函数 → `ai` → 环境变量。详细步骤见仓库内 [`AI_CONFIG_GUIDE.md`](./AI_CONFIG_GUIDE.md)。
+
+仓库根目录的 `deepseek_config.json` 只是一份**占位示例**（`AI_API_KEY` 为 `YOUR_AI_API_KEY`），代码不会读取它；请勿把真实 key 写进该文件或提交到仓库。
 
 ### 5）配置云函数定时触发器
 
@@ -163,11 +183,12 @@ App<IAppOption>({
 │     ├─ config.json                    # 定时触发器 + openapi 权限
 │     └─ package.json
 ├─ typings/                             # 小程序 typings
-├─ project.config.json
-├─ project.private.config.json
+├─ project.config.json                  # 项目配置（含 appid，导入时替换为你自己的）
 ├─ tsconfig.json
 └─ package.json
 ```
+
+> `project.private.config.json`（微信开发者工具本地私有配置）已被 `.gitignore` 排除，不包含在仓库中；它由工具在本地自动生成，无需手动准备。
 
 ## 数据结构（简要）
 
